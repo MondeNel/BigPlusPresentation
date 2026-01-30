@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>POS Features Presentation</title>
+
+<!-- Tailwind + Icons -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet"/>
+
+<style>
+body {
+  font-family: 'Inter', sans-serif;
+  background:#f3f4f6;
+}
+
+.slide-container {
+  width:1280px;
+  height:720px;
+  margin:auto;
+  display:flex;
+  background:white;
+  box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+.image-section {
+  width:45%;
+  padding:40px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#f8fafc;
+  border-right:1px solid #e5e7eb;
+}
+
+.image-wrapper {
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 20px 25px rgba(0,0,0,.15);
+}
+
+.content-section {
+  width:55%;
+  padding:60px 80px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.example-box {
+  margin-top:40px;
+  padding:24px;
+  border-left:5px solid #3b82f6;
+  background:#eff6ff;
+  border-radius:0 8px 8px 0;
+}
+
+.nav {
+  width:1280px;
+  margin:16px auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SLIDE -->
+<div class="slide-container">
+  <div class="image-section">
+    <div class="image-wrapper">
+      <img id="slide-image" class="max-h-[600px]" />
+    </div>
+  </div>
+
+  <div class="content-section">
+    <span id="slide-badge" class="mb-6 inline-flex items-center px-4 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold"></span>
+
+    <h1 id="slide-title" class="text-6xl font-extrabold mb-6"></h1>
+    <p id="slide-desc" class="text-2xl text-slate-600 mb-4"></p>
+    <p id="slide-extra" class="text-lg text-slate-500"></p>
+
+    <div class="example-box">
+      <h3 class="font-bold mb-2">Practical Example</h3>
+      <p id="slide-example"></p>
+    </div>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <button onclick="prevSlide()" class="px-6 py-3 bg-gray-200 rounded hover:bg-gray-300">
+    ⬅ Previous
+  </button>
+
+  <span id="counter" class="font-semibold"></span>
+
+  <button onclick="nextSlide()" class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+    Next ➡
+  </button>
+</div>
+
+<script>
+const slides = [
+  {
+    badge: "POS Feature 01",
+    title: "Parked Sales",
+    desc: "Saves an order without payment so the customer can pay later.",
+    extra: "Prevents blocking the register while keeping orders safe.",
+    example: "A customer orders a food parcel today and pays next week.",
+    image: "image/pos-ui-parked_sales.png"
+  },
+  {
+    badge: "POS Feature 02",
+    title: "Pick Up",
+    desc: "Finds pre-paid orders using a reference number.",
+    extra: "Speeds up collections for prepared orders.",
+    example: "Customer shows a pickup code and collects their parcel.",
+    image: "image/pos-ui-pick_up.png"
+  },
+  {
+    badge: "POS Feature 03",
+    title: "Gift Receipt",
+    desc: "Allows collection without showing prices.",
+    extra: "Ideal for gifts and remote purchases.",
+    example: "You send a gift code to a friend to collect an item.",
+    image: "image/pos-ui-gift_rec.png"
+  },
+  {
+    badge: "POS Feature 04",
+    title: "Void",
+    desc: "Cancels a transaction before payment is finalized.",
+    extra: "Used to fix mistakes instantly.",
+    example: "Cashier scans wrong item and voids it.",
+    image: "image/pos-ui-void.png"
+  },
+  {
+    badge: "POS Feature 05",
+    title: "Return",
+    desc: "Processes returned items for refunds or exchanges.",
+    extra: "Links back to original sale.",
+    example: "Customer returns wrong size shirt.",
+    image: "image/pos-ui-return.png"
+  },
+  {
+    badge: "POS Feature 06",
+    title: "Lookup",
+    desc: "Searches inventory to check product availability.",
+    extra: "No need to leave the counter.",
+    example: "Customer asks if chargers are in stock.",
+    image: "image/pos-ui-lock_up.png"
+  },
+  {
+    badge: "POS Feature 07",
+    title: "Cash Up",
+    desc: "Balances physical cash with system sales.",
+    extra: "Done at the end of the shift.",
+    example: "Cashier counts money and closes register.",
+    image: "image/pos-ui-cash_up.png"
+  },
+  {
+    badge: "POS Feature 08",
+    title: "Lock",
+    desc: "Secures the POS when cashier steps away.",
+    extra: "Prevents fraud and unauthorized use.",
+    example: "Cashier locks screen before break.",
+    image: "image/pos-ui-lock.png"
+  }
+];
+
+let current = 0;
+
+function render() {
+  const s = slides[current];
+  document.getElementById("slide-badge").innerText = s.badge;
+  document.getElementById("slide-title").innerText = s.title;
+  document.getElementById("slide-desc").innerText = s.desc;
+  document.getElementById("slide-extra").innerText = s.extra;
+  document.getElementById("slide-example").innerText = s.example;
+  document.getElementById("slide-image").src = s.image;
+  document.getElementById("counter").innerText = `Slide ${current + 1} of ${slides.length}`;
+}
+
+function nextSlide() {
+  if (current < slides.length - 1) current++;
+  render();
+}
+
+function prevSlide() {
+  if (current > 0) current--;
+  render();
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") nextSlide();
+  if (e.key === "ArrowLeft") prevSlide();
+});
+
+render();
+</script>
+
+</body>
+</html>
