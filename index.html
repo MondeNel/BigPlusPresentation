@@ -13,56 +13,40 @@
 <style>
 body {
   font-family: 'Inter', sans-serif;
-  background:#f3f4f6;
+  background: #f1f5f9;
 }
 
+/* Desktop slide look */
 .slide-container {
-  width:1280px;
-  height:720px;
-  margin:auto;
-  display:flex;
-  background:white;
-  box-shadow:0 10px 30px rgba(0,0,0,.1);
+  max-width: 1280px;
+  min-height: 720px;
+  margin: auto;
+  background: #ffffff;
+  box-shadow: 0 20px 40px rgba(0,0,0,.08);
+  border-radius: 16px;
+  overflow: hidden;
 }
 
-.image-section {
-  width:45%;
-  padding:40px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#f8fafc;
-  border-right:1px solid #e5e7eb;
-}
-
+/* Image polish */
 .image-wrapper {
-  border-radius:12px;
-  overflow:hidden;
-  box-shadow:0 20px 25px rgba(0,0,0,.15);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0,0,0,.12);
 }
 
-.content-section {
-  width:55%;
-  padding:60px 80px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-}
-
+/* Example highlight */
 .example-box {
-  margin-top:40px;
-  padding:24px;
-  border-left:5px solid #3b82f6;
-  background:#eff6ff;
-  border-radius:0 8px 8px 0;
+  margin-top: 32px;
+  padding: 20px 24px;
+  border-left: 4px solid #3b82f6;
+  background: #eff6ff;
+  border-radius: 0 10px 10px 0;
 }
 
+/* Navigation */
 .nav {
-  width:1280px;
-  margin:16px auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  max-width: 1280px;
+  margin: 20px auto;
 }
 </style>
 </head>
@@ -70,128 +54,164 @@ body {
 <body>
 
 <!-- SLIDE -->
-<div class="slide-container">
-  <div class="image-section">
-    <div class="image-wrapper">
-      <img id="slide-image" class="max-h-[600px]" />
+<div class="slide-container flex flex-col lg:flex-row">
+
+  <!-- IMAGE SECTION -->
+  <div class="lg:w-5/12 w-full bg-slate-50 border-b lg:border-b-0 lg:border-r border-slate-200 flex items-center justify-center p-6 sm:p-10">
+    <div class="image-wrapper w-full max-w-md">
+      <img
+        id="slide-image"
+        class="w-full h-auto object-contain"
+        alt="POS feature preview"
+      />
     </div>
   </div>
 
-  <div class="content-section">
-    <span id="slide-badge" class="mb-6 inline-flex items-center px-4 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold"></span>
+  <!-- CONTENT SECTION -->
+  <div class="lg:w-7/12 w-full flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-16">
 
-    <h1 id="slide-title" class="text-6xl font-extrabold mb-6"></h1>
-    <p id="slide-desc" class="text-2xl text-slate-600 mb-4"></p>
-    <p id="slide-extra" class="text-lg text-slate-500"></p>
+    <span
+      id="slide-badge"
+      class="mb-5 inline-flex items-center w-max px-4 py-1 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold tracking-wide"
+    ></span>
+
+    <h1
+      id="slide-title"
+      class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 mb-4"
+    ></h1>
+
+    <p
+      id="slide-desc"
+      class="text-lg sm:text-xl text-slate-600 mb-3"
+    ></p>
+
+    <p
+      id="slide-extra"
+      class="text-base text-slate-500 max-w-xl"
+    ></p>
 
     <div class="example-box">
-      <h3 class="font-bold mb-2">Practical Example</h3>
-      <p id="slide-example"></p>
+      <h3 class="font-semibold text-slate-900 mb-2">Practical Example</h3>
+      <p id="slide-example" class="text-slate-700"></p>
     </div>
+
   </div>
 </div>
 
 <!-- NAVIGATION -->
-<div class="nav">
-  <button onclick="prevSlide()" class="px-6 py-3 bg-gray-200 rounded hover:bg-gray-300">
+<div class="nav flex items-center justify-between px-4 sm:px-0">
+  <button onclick="prevSlide()" class="px-5 py-2.5 bg-slate-200 rounded-lg hover:bg-slate-300 transition">
     ⬅ Previous
   </button>
 
-  <span id="counter" class="font-semibold"></span>
+  <span id="counter" class="font-medium text-slate-600"></span>
 
-  <button onclick="nextSlide()" class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+  <button onclick="nextSlide()" class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
     Next ➡
   </button>
 </div>
 
+<!-- VOICE CONTROLS -->
+<div class="nav flex justify-center gap-3 mt-4">
+  <button onclick="speakSlide()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+    🔊 Play
+  </button>
+
+  <button onclick="pauseSpeech()" class="px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">
+    ⏸ Pause
+  </button>
+
+  <button onclick="stopSpeech()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+    ⏹ Stop
+  </button>
+</div>
+
 <script>
+/**
+ * @typedef {Object} Slide
+ * @property {string} badge
+ * @property {string} title
+ * @property {string} desc
+ * @property {string} extra
+ * @property {string} example
+ * @property {string} image
+ */
+
+/** @type {Slide[]} */
 const slides = [
-  {
-    badge: "POS Feature 01",
-    title: "Parked Sales",
-    desc: "Saves an order without payment so the customer can pay later.",
-    extra: "Prevents blocking the register while keeping orders safe.",
-    example: "A customer orders a food parcel today and pays next week.",
-    image: "image/pos-ui-parked_sales.png"
-  },
-  {
-    badge: "POS Feature 02",
-    title: "Pick Up",
-    desc: "Finds pre-paid orders using a reference number.",
-    extra: "Speeds up collections for prepared orders.",
-    example: "Customer shows a pickup code and collects their parcel.",
-    image: "image/pos-ui-pick_up.png"
-  },
-  {
-    badge: "POS Feature 03",
-    title: "Gift Receipt",
-    desc: "Allows collection without showing prices.",
-    extra: "Ideal for gifts and remote purchases.",
-    example: "You send a gift code to a friend to collect an item.",
-    image: "image/pos-ui-gift_rec.png"
-  },
-  {
-    badge: "POS Feature 04",
-    title: "Void",
-    desc: "Cancels a transaction before payment is finalized.",
-    extra: "Used to fix mistakes instantly.",
-    example: "Cashier scans wrong item and voids it.",
-    image: "image/pos-ui-void.png"
-  },
-  {
-    badge: "POS Feature 05",
-    title: "Return",
-    desc: "Processes returned items for refunds or exchanges.",
-    extra: "Links back to original sale.",
-    example: "Customer returns wrong size shirt.",
-    image: "image/pos-ui-return.png"
-  },
-  {
-    badge: "POS Feature 06",
-    title: "Lookup",
-    desc: "Searches inventory to check product availability.",
-    extra: "No need to leave the counter.",
-    example: "Customer asks if chargers are in stock.",
-    image: "image/pos-ui-lock_up.png"
-  },
-  {
-    badge: "POS Feature 07",
-    title: "Cash Up",
-    desc: "Balances physical cash with system sales.",
-    extra: "Done at the end of the shift.",
-    example: "Cashier counts money and closes register.",
-    image: "image/pos-ui-cash_up.png"
-  },
-  {
-    badge: "POS Feature 08",
-    title: "Lock",
-    desc: "Secures the POS when cashier steps away.",
-    extra: "Prevents fraud and unauthorized use.",
-    example: "Cashier locks screen before break.",
-    image: "image/pos-ui-lock.png"
-  }
+  { badge:"POS Feature 01", title:"Parked Sales", desc:"Saves an order without payment so the customer can pay later.", extra:"Prevents blocking the register while keeping orders safe.", example:"A customer orders a food parcel today and pays next week.", image:"image/pos-ui-parked_sales.png" },
+  { badge:"POS Feature 02", title:"Pick Up", desc:"Finds pre-paid orders using a reference number.", extra:"Speeds up collections for prepared orders.", example:"Customer shows a pickup code and collects their parcel.", image:"image/pos-ui-pick_up.png" },
+  { badge:"POS Feature 03", title:"Gift Receipt", desc:"Allows collection without showing prices.", extra:"Ideal for gifts and remote purchases.", example:"You send a gift code to a friend to collect an item.", image:"image/pos-ui-gift_rec.png" },
+  { badge:"POS Feature 04", title:"Void", desc:"Cancels a transaction before payment is finalized.", extra:"Used to fix mistakes instantly.", example:"Cashier scans wrong item and voids it.", image:"image/pos-ui-void.png" },
+  { badge:"POS Feature 05", title:"Return", desc:"Processes returned items for refunds or exchanges.", extra:"Links back to original sale.", example:"Customer returns wrong size shirt.", image:"image/pos-ui-return.png" },
+  { badge:"POS Feature 06", title:"Lookup", desc:"Searches inventory to check product availability.", extra:"No need to leave the counter.", example:"Customer asks if chargers are in stock.", image:"image/pos-ui-lock_up.png" },
+  { badge:"POS Feature 07", title:"Cash Up", desc:"Balances physical cash with system sales.", extra:"Done at the end of the shift.", example:"Cashier counts money and closes register.", image:"image/pos-ui-cash_up.png" },
+  { badge:"POS Feature 08", title:"Lock", desc:"Secures the POS when cashier steps away.", extra:"Prevents fraud and unauthorized use.", example:"Cashier locks screen before break.", image:"image/pos-ui-lock.png" }
 ];
 
 let current = 0;
 
+/* ===================== SPEECH ===================== */
+
+const synth = window.speechSynthesis;
+let utterance = null;
+
+/**
+ * Builds narration text from slide
+ * @returns {string}
+ */
+function getNarrationText() {
+  const s = slides[current];
+  return `${s.title}. ${s.desc}. ${s.extra}. Practical example: ${s.example}.`;
+}
+
+/**
+ * Speak slide content
+ */
+function speakSlide() {
+  stopSpeech();
+  utterance = new SpeechSynthesisUtterance(getNarrationText());
+  utterance.rate = 0.95;
+  utterance.pitch = 1;
+  synth.speak(utterance);
+}
+
+/**
+ * Pause narration
+ */
+function pauseSpeech() {
+  if (synth.speaking && !synth.paused) synth.pause();
+}
+
+/**
+ * Stop narration
+ */
+function stopSpeech() {
+  if (synth.speaking || synth.paused) synth.cancel();
+}
+
+/* ===================== SLIDES ===================== */
+
 function render() {
   const s = slides[current];
-  document.getElementById("slide-badge").innerText = s.badge;
-  document.getElementById("slide-title").innerText = s.title;
-  document.getElementById("slide-desc").innerText = s.desc;
-  document.getElementById("slide-extra").innerText = s.extra;
-  document.getElementById("slide-example").innerText = s.example;
+  document.getElementById("slide-badge").textContent = s.badge;
+  document.getElementById("slide-title").textContent = s.title;
+  document.getElementById("slide-desc").textContent = s.desc;
+  document.getElementById("slide-extra").textContent = s.extra;
+  document.getElementById("slide-example").textContent = s.example;
   document.getElementById("slide-image").src = s.image;
-  document.getElementById("counter").innerText = `Slide ${current + 1} of ${slides.length}`;
+  document.getElementById("counter").textContent = `Slide ${current + 1} of ${slides.length}`;
 }
 
 function nextSlide() {
   if (current < slides.length - 1) current++;
+  stopSpeech();
   render();
 }
 
 function prevSlide() {
   if (current > 0) current--;
+  stopSpeech();
   render();
 }
 
